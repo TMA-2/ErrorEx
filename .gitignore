@@ -1,0 +1,24 @@
+# Build artifacts
+*.psm1.bak
+*.psd1.bak
+
+# Test results
+TestResults/
+*.trx
+*.xml
+
+# Coverage
+coverage/
+*.coverage.xml
+
+# Editor
+.vs/
+.vscode/*.log
+
+# OS
+Thumbs.db
+.DS_Store
+
+# PlatyPS
+en-US/*.xml
+!ErrorEx-help.xml

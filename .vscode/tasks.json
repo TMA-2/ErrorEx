@@ -1,0 +1,57 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run Pester Tests",
+            "type": "shell",
+            "command": "Invoke-Pester",
+            "args": [
+                "-Path",
+                "'${workspaceFolder}/test'",
+                "-Configuration",
+                "@{Debug = @{ShowNavigationMarkers = $true}}"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": "$pester"
+        },
+        {
+            "label": "Import Module",
+            "type": "shell",
+            "command": "Import-Module",
+            "args": [
+                "'${workspaceFolder}/ErrorEx.psd1'",
+                "-Force",
+                "-Verbose"
+            ],
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "Build Help with PlatyPS",
+            "type": "shell",
+            "command": "New-MarkdownHelp",
+            "args": [
+                "-Module",
+                "ErrorEx",
+                "-OutputFolder",
+                "'${workspaceFolder}/Docs'",
+                "-Force"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        }
+    ]
+}

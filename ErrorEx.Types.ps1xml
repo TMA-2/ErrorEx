@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Types>
+  <Type>
+    <Name>ErrorEx</Name>
+    <Members>
+      <MemberSet>
+        <Name>PSStandardMembers</Name>
+        <Members>
+          <PropertySet>
+            <Name>DefaultDisplayPropertySet</Name>
+            <ReferencedProperties>
+              <Name>ErrorCode</Name>
+              <Name>HResult</Name>
+              <Name>HResultHex</Name>
+              <Name>Severity</Name>
+              <Name>Message</Name>
+              <Name>Facility</Name>
+            </ReferencedProperties>
+          </PropertySet>
+        </Members>
+      </MemberSet>
+    </Members>
+  </Type>
+</Types>
