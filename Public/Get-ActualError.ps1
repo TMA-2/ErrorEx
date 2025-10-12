@@ -1,4 +1,5 @@
 using module .\..\Classes\ErrorEx.psm1
+using namespace System.Management.Automation
 
 function Get-ActualError {
     <#

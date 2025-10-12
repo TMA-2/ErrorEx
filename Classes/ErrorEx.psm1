@@ -29,14 +29,15 @@ class ErrorEx {
     ErrorEx([int]$HResultCode) {
         $this.HResult = $HResultCode
 
-        $this.ConvertFromWin32Error()
-
         # Get error message from Win32Exception
         $this.Win32Error = [Win32Exception]::new($HResultCode)
         $this.Message = $this.Win32Error.Message
 
         # Get typed exception from Marshal
         $this.TypedError = [Marshal]::GetExceptionForHR($HResultCode)
+
+        # Convert from Win32 error code if applicable
+        $this.ConvertFromWin32Error()
 
         # Format hex and binary representations
         $this.HResultHex = '0x{0:X8}' -f $HResultCode
