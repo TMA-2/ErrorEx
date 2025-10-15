@@ -17,6 +17,17 @@
               <Name>Facility</Name>
             </ReferencedProperties>
           </PropertySet>
+          <PropertySet>
+            <Name>DefaultKeyPropertySet</Name>
+            <ReferencedProperties>
+              <Name>ErrorCode</Name>
+              <Name>Message</Name>
+            </ReferencedProperties>
+          </PropertySet>
+          <NoteProperty>
+            <Name>DefaultDisplayProperty</Name>
+            <Value>ErrorCode</Value>
+          </NoteProperty>
         </Members>
       </MemberSet>
     </Members>

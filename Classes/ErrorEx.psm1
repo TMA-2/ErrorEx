@@ -29,15 +29,15 @@ class ErrorEx {
     ErrorEx([int]$HResultCode) {
         $this.HResult = $HResultCode
 
+        # Convert from Win32 error code if applicable
+        $HResultCode = $this.ConvertFromWin32Error($HResultCode)
+
         # Get error message from Win32Exception
         $this.Win32Error = [Win32Exception]::new($HResultCode)
         $this.Message = $this.Win32Error.Message
 
         # Get typed exception from Marshal
         $this.TypedError = [Marshal]::GetExceptionForHR($HResultCode)
-
-        # Convert from Win32 error code if applicable
-        $this.ConvertFromWin32Error()
 
         # Format hex and binary representations
         $this.HResultHex = '0x{0:X8}' -f $HResultCode
@@ -58,31 +58,34 @@ class ErrorEx {
         }
     }
 
-    hidden [void] ConvertFromWin32Error() {
-        if ($this.HResult -lt 0x80000000 -and $this.HResult -ne 0) {
-            $this.HResult = [int]0x80070000 -bor $this.HResult
+    hidden [int] ConvertFromWin32Error([int]$Code) {
+        if ($Code -lt 0x80000000 -and $Code -ne 0) {
+            return [int]0x80070000 -bor $Code
+        }
+        else {
+            return $Code
         }
     }
 
     hidden [void] ExtractBitFields([int]$Code) {
         # Bits 0-15: Error Code
         $this.ErrorCode = $Code -band 0xFFFF
-        $Code = $Code -shr 16
+        $Code = $Code | shr 16
 
         # Bits 16-26: Facility Code (11 bits)
         $this.FacilityCode = $Code -band 0x7FF
-        $Code = $Code -shr 11
+        $Code = $Code | shr 11
 
         # Bit 27: NT Status flag
         $this.IsNTStatus = ($Code -band 1) -eq 1
-        $Code = $Code -shr 1
+        $Code = $Code | shr 1
 
         # Bit 28: Customer flag
         $this.IsCustomer = ($Code -band 1) -eq 1
-        $Code = $Code -shr 1
+        $Code = $Code | shr 1
 
         # Bit 29: Reserved (skip)
-        $Code = $Code -shr 1
+        $Code = $Code | shr 1
 
         # Bit 31: Severity/Failure flag
         $this.IsFailure = ($Code -band 1) -eq 1

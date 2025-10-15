@@ -3,7 +3,7 @@
     RootModule = 'ErrorEx.psm1'
 
     # Version number of this module.
-    ModuleVersion = '0.1.1'
+    ModuleVersion = '0.2.2'
 
     # ID used to uniquely identify this module
     GUID = 'a8b9c7d6-e5f4-4a3b-9c2d-1e0f9a8b7c6d'
@@ -23,6 +23,10 @@
     # Minimum version of the PowerShell engine required by this module
     PowerShellVersion = '5.1'
 
+    RequiredModules = @(
+        'Conversion'
+    )
+
     # Functions to export from this module
     FunctionsToExport = @(
         'Get-ActualError'
@@ -41,7 +45,7 @@
     TypesToProcess = @('ErrorEx.Types.ps1xml')
 
     # Format files (.ps1xml) to be loaded when importing this module
-    FormatsToProcess = @()
+    FormatsToProcess = @('ErrorEx.Format.ps1xml')
 
     # Private data to pass to the module specified in RootModule/ModuleToProcess
     PrivateData = @{

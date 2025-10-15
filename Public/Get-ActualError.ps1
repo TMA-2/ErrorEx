@@ -52,12 +52,23 @@ function Get-ActualError {
             ValueFromPipeline,
             ParameterSetName = 'Error'
         )]
-        [ErrorRecord]$Exception
+        [ErrorRecord]$ErrorRecord,
+
+        [Parameter(
+            Mandatory,
+            Position = 0,
+            ValueFromPipeline,
+            ParameterSetName = 'Exception'
+        )]
+        [Exception]$Exception
     )
 
     process {
         if ($PSCmdlet.ParameterSetName -eq 'Error') {
             $HResult = $Exception.Exception.HResult
+        }
+        elseif ($PSCmdlet.ParameterSetName -eq 'Exception') {
+            $HResult = $Exception.HResult
         }
 
         # ErrorEx constructor handles all bit extraction
