@@ -27,27 +27,40 @@ class ErrorEx {
 
     # Constructor with HResult
     ErrorEx([int]$HResultCode) {
-        $this.HResult = $HResultCode
-
         # Convert from Win32 error code if applicable
         $HResultCode = $this.ConvertFromWin32Error($HResultCode)
 
-        # Get error message from Win32Exception
-        $this.Win32Error = [Win32Exception]::new($HResultCode)
-        $this.Message = $this.Win32Error.Message
+        # Store the converted HRESULT
+        $this.HResult = $HResultCode
 
-        # Get typed exception from Marshal
+        # Extract bit fields first to determine facility
+        $this.ExtractBitFields($HResultCode)
+
+        # Get typed exception from Marshal (best for .NET exceptions)
         $this.TypedError = [Marshal]::GetExceptionForHR($HResultCode)
+
+        # Get message based on facility
+        if ($this.Facility -eq [FacilityCode]::FACILITY_WIN32) {
+            # Use Win32Exception for Win32 errors
+            $this.Win32Error = [Win32Exception]::new($HResultCode)
+            $this.Message = $this.Win32Error.Message
+        }
+        elseif ($null -ne $this.TypedError -and ![string]::IsNullOrWhiteSpace($this.TypedError.Message)) {
+            # Use the typed exception message for .NET and other facilities
+            $this.Message = $this.TypedError.Message
+        }
+        else {
+            # Fallback to Win32Exception
+            $this.Win32Error = [Win32Exception]::new($HResultCode)
+            $this.Message = $this.Win32Error.Message
+        }
 
         # Format hex and binary representations
         $this.HResultHex = '0x{0:X8}' -f $HResultCode
         $this.HResultBin = '0b{0}' -f [Convert]::ToString($HResultCode, 2).PadLeft(32, '0')
 
-        # Extract bit fields using local variable to avoid modifying HResult property
-        $this.ExtractBitFields($HResultCode)
-
         # Set severity as readable string
-        if ($HResultCode -lt 0x80000000 -and $HResultCode -ne 0) {
+        if ($this.HResult -gt 0 -and $this.HResult -lt 0x10000) {
             $this.Severity = 'Indeterminate (Win32 error code)'
         }
         elseif ($this.IsFailure) {
@@ -59,7 +72,9 @@ class ErrorEx {
     }
 
     hidden [int] ConvertFromWin32Error([int]$Code) {
-        if ($Code -lt 0x80000000 -and $Code -ne 0) {
+        # Win32 error codes are positive values < 65536
+        # HRESULTs have bit 31 set (appear as negative int32)
+        if ($Code -gt 0 -and $Code -lt 0x10000) {
             return [int]0x80070000 -bor $Code
         }
         else {
@@ -70,29 +85,22 @@ class ErrorEx {
     hidden [void] ExtractBitFields([int]$Code) {
         # Bits 0-15: Error Code
         $this.ErrorCode = $Code -band 0xFFFF
-        $Code = $Code | shr 16
 
         # Bits 16-26: Facility Code (11 bits)
-        $this.FacilityCode = $Code -band 0x7FF
-        $Code = $Code | shr 11
+        $this.FacilityCode = ($Code -shr 16) -band 0x7FF
 
         # Bit 27: NT Status flag
-        $this.IsNTStatus = ($Code -band 1) -eq 1
-        $Code = $Code | shr 1
+        $this.IsNTStatus = (($Code -shr 27) -band 1) -eq 1
 
         # Bit 28: Customer flag
-        $this.IsCustomer = ($Code -band 1) -eq 1
-        $Code = $Code | shr 1
+        $this.IsCustomer = (($Code -shr 28) -band 1) -eq 1
 
-        # Bit 29: Reserved (skip)
-        $Code = $Code | shr 1
+        # Bit 29: Reserved (we don't use this)
 
-        # Bit 31: Severity/Failure flag
-        $this.IsFailure = ($Code -band 1) -eq 1
+        # Bit 31: Severity/Failure flag (topmost bit)
+        $this.IsFailure = $Code -lt 0
 
         # Map facility code to enum name
         $this.Facility = [FacilityCode]$this.FacilityCode
     }
 }
-
-Export-ModuleMember -Variable 'this'

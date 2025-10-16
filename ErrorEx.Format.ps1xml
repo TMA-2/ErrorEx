@@ -19,11 +19,11 @@
           </TableColumnHeader>
           <TableColumnHeader>
             <Label>Severity</Label>
-            <Width>7</Width>
+            <Width>8</Width>
           </TableColumnHeader>
           <TableColumnHeader>
             <Label>Facility</Label>
-            <Width>12</Width>
+            <Width>15</Width>
           </TableColumnHeader>
           <TableColumnHeader>
             <Label>Message</Label>

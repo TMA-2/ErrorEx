@@ -1,57 +1,91 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "Run Pester Tests",
-            "type": "shell",
-            "command": "Invoke-Pester",
-            "args": [
-                "-Path",
-                "'${workspaceFolder}/test'",
-                "-Configuration",
-                "@{Debug = @{ShowNavigationMarkers = $true}}"
-            ],
-            "group": {
-                "kind": "test",
-                "isDefault": true
-            },
-            "presentation": {
-                "reveal": "always",
-                "panel": "new"
-            },
-            "problemMatcher": "$pester"
-        },
-        {
-            "label": "Import Module",
-            "type": "shell",
-            "command": "Import-Module",
-            "args": [
-                "'${workspaceFolder}/ErrorEx.psd1'",
-                "-Force",
-                "-Verbose"
-            ],
-            "group": "none",
-            "presentation": {
-                "reveal": "always",
-                "panel": "shared"
-            }
-        },
-        {
-            "label": "Build Help with PlatyPS",
-            "type": "shell",
-            "command": "New-MarkdownHelp",
-            "args": [
-                "-Module",
-                "ErrorEx",
-                "-OutputFolder",
-                "'${workspaceFolder}/Docs'",
-                "-Force"
-            ],
-            "group": "build",
-            "presentation": {
-                "reveal": "always",
-                "panel": "shared"
-            }
-        }
-    ]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run Pester Tests",
+      "type": "shell",
+      "command": "Invoke-Pester",
+      "args": [
+        "-Path",
+        "'${workspaceFolder}/test'",
+        "-Configuration",
+        "@{Debug = @{ShowNavigationMarkers = $true}}"
+      ],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "problemMatcher": "$pester"
+    },
+    {
+      "label": "Import Module",
+      "type": "shell",
+      "command": "Import-Module",
+      "args": [
+        "'${workspaceFolder}/ErrorEx.psd1'",
+        "-Force",
+        "-Verbose"
+      ],
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Build Help with PlatyPS",
+      "type": "shell",
+      "command": "New-MarkdownHelp",
+      "args": [
+        "-Module",
+        "ErrorEx",
+        "-OutputFolder",
+        "'${workspaceFolder}/Docs'",
+        "-Force"
+      ],
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Test ErrorEx Class (Fresh Session)",
+      "type": "shell",
+      "command": "pwsh",
+      "args": [
+        "-NoProfile",
+        "-Command",
+        "using module './Classes/ErrorEx.psm1'; Write-Host 'Testing ErrorEx with common error codes...' -ForegroundColor Cyan; @(1603, 5, 2, 0x80070005, 0x80004005) | ForEach-Object { Write-Host \"`nCode: $_\" -ForegroundColor Yellow; [ErrorEx]::new($_) | Format-List ErrorCode, HResult, HResultHex, Facility, FacilityCode, Message, Severity, IsFailure }"
+      ],
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "focus": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Quick Test ErrorEx (Custom Code)",
+      "type": "shell",
+      "command": "pwsh",
+      "args": [
+        "-NoProfile",
+        "-Command",
+        "using module './Classes/ErrorEx.psm1'; $code = Read-Host 'Enter error code'; [ErrorEx]::new([int]$code) | Format-List *"
+      ],
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "focus": true
+      },
+      "problemMatcher": []
+    }
+  ]
 }

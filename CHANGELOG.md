@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `err` alias for `Get-ActualError`
+
+## [0.3.4] - 2025-10-25
+
+### Added
+- Added `Find-ErrorByMessage` function
+
+### Fixed
+- *Actually* corrected Win32 error detection & conversion.
+
+## [0.2.3] - 2025-10-15
+
+### Fixed
+- Corrected Win32 error conversion
+
 ## [0.2.2] - 2025-10-14
 
 ### Added

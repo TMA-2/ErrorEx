@@ -3,7 +3,7 @@
     RootModule = 'ErrorEx.psm1'
 
     # Version number of this module.
-    ModuleVersion = '0.2.2'
+    ModuleVersion = '0.3.4'
 
     # ID used to uniquely identify this module
     GUID = 'a8b9c7d6-e5f4-4a3b-9c2d-1e0f9a8b7c6d'
@@ -23,13 +23,12 @@
     # Minimum version of the PowerShell engine required by this module
     PowerShellVersion = '5.1'
 
-    RequiredModules = @(
-        'Conversion'
-    )
+    # RequiredModules = @('Conversion')
 
     # Functions to export from this module
     FunctionsToExport = @(
         'Get-ActualError'
+        'Find-ErrorByMessage'
     )
 
     # Cmdlets to export from this module
@@ -39,7 +38,9 @@
     VariablesToExport = @()
 
     # Aliases to export from this module
-    AliasesToExport = @()
+    AliasesToExport = @(
+        'err'
+    )
 
     # Type files (.ps1xml) to be loaded when importing this module
     TypesToProcess = @('ErrorEx.Types.ps1xml')
@@ -54,10 +55,10 @@
             Tags = @('Error', 'HRESULT', 'Win32', 'Diagnostics', 'Debugging')
 
             # A URL to the license for this module
-            LicenseUri = ''
+            LicenseUri = 'https://github.com/tma-2/ErrorEx/blob/main/LICENSE'
 
             # A URL to the main website for this project
-            ProjectUri = ''
+            ProjectUri = 'https://github.com/tma-2/ErrorEx'
 
             # ReleaseNotes of this module
             ReleaseNotes = 'See CHANGELOG.md'

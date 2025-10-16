@@ -12,6 +12,7 @@ Export-ModuleMember -Function @()  # Explicitly empty to start
 
 # Import public functions
 . "$PSScriptRoot\Public\Get-ActualError.ps1"
+. "$PSScriptRoot\Public\Find-ErrorByMessage.ps1"
 
 # Export public functions
-Export-ModuleMember -Function 'Get-ActualError'
+Export-ModuleMember -Function 'Get-ActualError','Find-ErrorByMessage' -Alias 'err'

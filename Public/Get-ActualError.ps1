@@ -36,6 +36,7 @@ function Get-ActualError {
         ErrorEx
     #>
     [OutputType([ErrorEx])]
+    [Alias('err')]
     [CmdletBinding(DefaultParameterSetName = 'HResult')]
     param (
         [Parameter(
