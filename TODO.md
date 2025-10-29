@@ -1,5 +1,8 @@
 # TODO
 
+## Testing Subtree Sync
+- [x] Test subtree push from monorepo to standalone repos
+
 ## General
 - [ ] Add PlatyPS-generated help documentation in `/Docs`
 - [ ] Add comprehensive Pester tests
