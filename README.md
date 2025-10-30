@@ -104,4 +104,4 @@ The `Get-ActualError` function returns an `ErrorEx` object with these properties
 
 All Rights Reserved
 
-Copyright (c) 2025 Texas Health Resources
+Copyright (c) 2025 Jonathan Dunham
